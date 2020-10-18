@@ -1,43 +1,62 @@
-
-let money = prompt('Ваш месячный доход?', 16000),       // Доход за месяц
+' use strict';
+let money = +prompt('Ваш месячный доход?', 16000),      // Доход за месяц
     income = 'Freelance',                               // Дополнительный доход
     addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'girlfriend, mobile, internet'),    // Дополнительный расходы
     deposit = confirm('Есть ли у вас депозит в банке?'),
     mission = 200000,                                   // Цель
     period = 1,                                         // Месяцев
-    budgetDay = 0;                 // Дневной доход
+    budgetDay = 0;                                      // Дневной доход
 
 let expenses1 = prompt('Введите обязательную статью расходов?', 'oil'),
     amount1 = +prompt('Во сколько это обойдется?', 6000),
     expenses2 = prompt('Введите обязательную статью расходов?', 'credit'),
     amount2 = +prompt('Во сколько это обойдется?', 8800);
 
-let budgetMonth = money - (amount1 + amount2);
-console.log('budgetMonth: ', budgetMonth);
-period = Math.ceil(mission / budgetMonth),
-console.log('period: ' + period);
-budgetDay = Math.round(budgetMonth / 30);
+// расходы в месяц
+const getExpensesMonth = function () {
+    return amount1 + amount2;
+};
+console.log('Расходы в месяц: ' + getExpensesMonth());
 
-console.log(typeof money);
-console.log(typeof deposit);
-console.log(typeof income);
-console.log(addExpenses.length);
-console.log('Период равен ' + period + ' месяцев'); 
-console.log('Цель заработать ' + mission + ' рублей');
+// доходы минус расходы
+const getAccumulatedMonth = function () {
+    return money - getExpensesMonth();
+};
+let accumulatedMonth = getAccumulatedMonth();
 
+// срок достижения цели
+const getTargetMonth = function () {
+    return Math.ceil(mission / accumulatedMonth);
+};
 
+// буджет на день
+budgetDay = Math.round(accumulatedMonth / 30);
+
+//тип данных
+const showTypeOf = function(data){
+    console.log(data, typeof data);
+};
+showTypeOf(money);
+showTypeOf(deposit);
+showTypeOf(income);
+
+console.log('Период равен ' + getTargetMonth() + ' месяцев'); 
 console.log(addExpenses.toLowerCase().split(', '));
 console.log('budgetDay: ', budgetDay);
 
-if (budgetDay >= 1200) {
-    alert('У вас высокий уровень дохода');
-}
-else if (budgetDay >= 600 && budgetDay < 1200) {
-    alert('У вас средний уровень дохода');
-}
-else if (budgetDay < 600 && budgetDay >= 0) {
-    alert('К сожалению у вас уровень дохода ниже среднего');
-}
-else if (budgetDay < 0) {
-    alert('Что то пошло не так...');
-}
+// уровень дохода
+const getStatusIncome = function () {
+    if (budgetDay >= 1200) {
+        return ('У вас высокий уровень дохода');
+    }
+    else if (budgetDay >= 600 && budgetDay < 1200) {
+        return ('У вас средний уровень дохода');
+    }
+    else if (budgetDay < 600 && budgetDay >= 0) {
+        return ('К сожалению у вас уровень дохода ниже среднего');
+    }
+    else if (budgetDay < 0) {
+        return ('Что то пошло не так...');
+    }
+};
+console.log(getStatusIncome());
