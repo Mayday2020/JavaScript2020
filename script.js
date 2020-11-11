@@ -20,10 +20,23 @@ let appData = {
     expenses: {},           // Доп. расходы
     addExpenses: [],        // Массив с возможными расходами
     deposit: false,         // Вклад
+    percentDeposit: 0,      // Процент вклада
+    moneyDeposit: 0,        // Сумма вклада
     mission: 50000,         // Цель
-    period: 0,              // Срок
+    period: 3,              // Срок
     asking: function() {
+
+        if(confirm('Есть ли у вас дополнительный источник заработка?')) {
+            let cashIncome,
+                itemIncome;
+                do{itemIncome = prompt('Какой у вас дополнительный заработок?', 'Таксую');}
+                while(!toString(itemIncome.trim));
+            do{cashIncome = prompt('Сколько в месяц зарабатываете на этом?', 15000);}
+            while(!isNumber(cashIncome));
+            appData.income[itemIncome] = cashIncome;
+        }
         let addExpenses = prompt('Перечислите возможные расходы', 'girlfriend, mobile, internet');
+            
             appData.addExpenses = addExpenses.toLowerCase().split(', ');
             appData.deposit = confirm('Есть ли у вас депозит в банке?');
             for (let i = 0; i < 2; i++) {
@@ -63,7 +76,19 @@ let appData = {
         else if (appData.budgetDay < 0) {
             return ('Что то пошло не так...');
         }
+    },
+    getInfoDeposit: function() {
+        if (appData.deposit) {
+            do{appData.percentDeposit = prompt('Какой годовой процент?', '10');}
+            while(!isNumber(appData.percentDeposit));
+            do{appData.moneyDeposit = prompt('Какая сумма заложена?', 10000);}
+            while(!isNumber(appData.moneyDeposit));
+        }
+    },
+    calcSavedMoney: function() {
+        return appData.budgetMonth * appData.period;
     }
+
 };
 appData.asking();
 console.log('Расходы в месяц: ' + appData.getExpensesMonth());
@@ -71,6 +96,6 @@ appData.getBudget();
 appData.getTargetMonth();
                                                 
 console.log(appData.getStatusIncome());
-for (let key in appData){
+/*for (let key in appData){
     console.log('Наша программа включает в себя данные:' + key + ' :' + appData[key]);
-}
+}*/
